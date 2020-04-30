@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express();
 
@@ -22,29 +23,17 @@ const database = {
             entries: 0,
             joined: new Date()
         }
-    ],
-    login: [
-        {
-            id: '123',
-            hash: '',
-            email: 'zen@gmail.com'
-        }
     ]
 }
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', (req, res)=>{
     res.json(database.users);
 })
 
 app.post('/signin', (req, res)=>{
-    bcrypt.compare("zain123", '$2a$10$zBaSgHQW8K.FffNv5qOdnuc0uuxWXCgUxNjZzcx8SktLgsx4QSZ7K', function(err, res) {
-        console.log('first guess', res)
-    });
-    bcrypt.compare("veggies", "$2a$10$zBaSgHQW8K.FffNv5qOdnuc0uuxWXCgUxNjZzcx8SktLgsx4QSZ7K", function(err, res) {
-        console.log('second guess', res)
-    });
     if(req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password){
         res.json('success');
