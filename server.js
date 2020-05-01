@@ -36,7 +36,7 @@ app.get('/', (req, res)=>{
 app.post('/signin', (req, res)=>{
     if(req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password){
-        res.json('success');
+        res.json(database.users[0]);
     }else{
         res.status(400).json('user not found');
     }
@@ -44,9 +44,6 @@ app.post('/signin', (req, res)=>{
 
 app.post('/signup', (req, res)=>{
     const { email, password, name } = req.body;
-    bcrypt.hash(password, null, null, function(err, hash) {
-        console.log(hash);
-    });
     database.users.push({
         id: '03',
         name: name,
