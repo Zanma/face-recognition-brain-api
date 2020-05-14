@@ -56,12 +56,17 @@ app.post('/signin', (req, res)=>{
 
 app.post('/signup', (req, res)=>{
     const { email, password, name } = req.body;
-    db('users').insert({
-        name : name,
-        email : email,
-        joined : new Date()
-    }).then(console.log)
-    res.json(database.users[database.users.length-1]);
+    db('users')
+        .returning('*')
+        .insert({
+            name : name,
+            email : email,
+            joined : new Date()
+        })
+        .then(user => {
+            res.json(user[0])
+        })
+        .catch(err => res.status(400).json('unable to register'))
 })
 
 app.get('/profile/:id', (req, res)=>{
